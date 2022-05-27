@@ -5,9 +5,7 @@ const getUser = () => {
 };
 
 const createUser = (data) => {
-   return axiosConfig.post('/auth/create-new-user', {
-      ...data,
-   });
+   return axiosConfig.post('/auth/create-new-user', data);
 };
 const deleteUser = (id) => {
    return axiosConfig.delete('/auth/delete-user', {
@@ -17,9 +15,7 @@ const deleteUser = (id) => {
    });
 };
 const updateUser = (data, id) => {
-   return axiosConfig.post(`/auth/edit-user?id=${id}`, {
-      ...data,
-   });
+   return axiosConfig.post(`/auth/edit-user?id=${id}`, data);
 };
 
 export { getUser, createUser, deleteUser, updateUser };

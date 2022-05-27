@@ -71,6 +71,7 @@ const User = ({ onSaveClick }) => {
    const [open, setOpen] = React.useState(false);
    const handleCreateUser = () => {
       setAction('create');
+      setEditUser(null);
       setOpen(true);
    };
    const handleClickOpen = () => {

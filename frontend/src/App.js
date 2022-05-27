@@ -1,13 +1,16 @@
-import React from 'react'
-import { Routes, Route } from 'react-router-dom'
-import routes from './routes'
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Home from './page/home';
+import routes from './routes';
+import 'normalize.css';
+import 'swiper/css';
 
-const getRoutes = (allRoutes) => {}
+const getRoutes = (allRoutes) => {};
 const App = () => {
    return (
       <>
          <Routes>
-            <Route path="/" />
+            <Route path="/" element={<Home />} />
             {routes.map((route) => (
                <Route
                   key={route.key}
@@ -18,7 +21,7 @@ const App = () => {
             {getRoutes(routes)}
          </Routes>
       </>
-   )
-}
+   );
+};
 
-export default App
+export default App;

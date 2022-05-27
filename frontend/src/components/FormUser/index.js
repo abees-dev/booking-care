@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
@@ -43,9 +43,9 @@ const schema = yup.object({
    password: yup.string().required('Please enter your password'),
    address: yup.string().required('Please enter your address'),
    phoneNumber: yup.string().required('Please enter your phone number'),
-   positionId: yup.string().required(),
-   roleId: yup.string().required(),
-   gender: yup.string().required(),
+   positionId: yup.string().required('Please select gender'),
+   roleId: yup.string().required('Please select Role'),
+   gender: yup.string().required('Please select position'),
 });
 
 const FormUser = ({ onSuccess, editUser, action, handleClose }) => {
@@ -141,6 +141,7 @@ const FormUser = ({ onSuccess, editUser, action, handleClose }) => {
          password: editUser?.password || 'admin',
          address: editUser?.address || 'admin address',
          phoneNumber: editUser?.phoneNumber || '0332414089',
+         imageUrl: editUser?.imageUrl || '',
       },
       resolver: yupResolver(schema),
    });
@@ -157,8 +158,10 @@ const FormUser = ({ onSuccess, editUser, action, handleClose }) => {
       getAllCode('GENDER', setGender);
       getAllCode('ROLE', setRole);
       getAllCode('POSITION', setPosition);
+
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, []);
+   // const formData = new FormData();
    const handleSubmitForm = async (data) => {
       if (action === 'edit') {
          try {
@@ -169,19 +172,42 @@ const FormUser = ({ onSuccess, editUser, action, handleClose }) => {
             return error.response;
          }
       } else if (action === 'create') {
+         const formData = new FormData();
+         console.log(formData);
+         formData.append('username', data.username);
+         formData.append('email', data.email);
+         formData.append('password', data.password);
+         formData.append('fullName', data.fullName);
+         formData.append('address', data.address);
+         formData.append('phoneNumber', data.phoneNumber);
+         formData.append('gender', data.gender);
+         formData.append('roleId', data.roleId);
+         formData.append('positionId', data.positionId);
+         formData.append('imageUrl', image ? image : data.imageUrl);
          try {
-            const res = await createUser(data);
+            const res = await createUser(formData);
+
             if (res.newUser) {
                onSuccess(res.newUser);
                handleClose();
                reset();
-            } else {
+            } else if (res.success === false) {
                handleClickVariant(res.message, 'error')();
             }
          } catch (error) {
             return error.response;
          }
       }
+   };
+
+   const [image, setImage] = useState(null);
+   const [preview, setPreview] = useState();
+
+   const onchangeImage = (event) => {
+      const file = event.target.files[0];
+      setImage(file);
+      const objectUrl = URL.createObjectURL(file);
+      setPreview(objectUrl);
    };
 
    return (
@@ -200,7 +226,7 @@ const FormUser = ({ onSuccess, editUser, action, handleClose }) => {
                               margin="dense"
                               size="small"
                               type={
-                                 field?.type === 'password' && showPass
+                                 field?.type === 'password' && !showPass
                                     ? 'password'
                                     : 'text'
                               }
@@ -232,6 +258,7 @@ const FormUser = ({ onSuccess, editUser, action, handleClose }) => {
                         native
                         margin="dense"
                         id="grouped-native-select"
+                        defaultValue={editUser?.gender || ''}
                         {...register('gender')}
                         size="small">
                         {gender?.data &&
@@ -241,6 +268,11 @@ const FormUser = ({ onSuccess, editUser, action, handleClose }) => {
                               </option>
                            ))}
                      </Select>
+                     {errors['gender'] && (
+                        <HelperTextStyles
+                           children={`${errors['gender']?.message}`}
+                        />
+                     )}
                   </FormControl>
                </Grid>
                <Grid item xs={4}>
@@ -254,6 +286,7 @@ const FormUser = ({ onSuccess, editUser, action, handleClose }) => {
                         native
                         margin="dense"
                         id="grouped-native-select"
+                        defaultValue={editUser?.roleId || ''}
                         size="small">
                         {role?.data &&
                            role?.data.map((item) => (
@@ -262,6 +295,11 @@ const FormUser = ({ onSuccess, editUser, action, handleClose }) => {
                               </option>
                            ))}
                      </Select>
+                     {errors['roleId'] && (
+                        <HelperTextStyles
+                           children={`${errors['roleId']?.message}`}
+                        />
+                     )}
                   </FormControl>
                </Grid>
                <Grid item xs={4}>
@@ -274,6 +312,7 @@ const FormUser = ({ onSuccess, editUser, action, handleClose }) => {
                         native
                         margin="dense"
                         id="grouped-native-select"
+                        defaultValue={editUser?.positionId || ''}
                         {...register('positionId')}
                         size="small">
                         {position?.data &&
@@ -283,10 +322,19 @@ const FormUser = ({ onSuccess, editUser, action, handleClose }) => {
                               </option>
                            ))}
                      </Select>
+                     {errors['positionId'] && (
+                        <HelperTextStyles
+                           children={`${errors['positionId']?.message}`}
+                        />
+                     )}
                   </FormControl>
                </Grid>
             </Grid>
-            <UploadImage></UploadImage>
+            <UploadImage
+               onchangeImage={onchangeImage}
+               imageUrl={editUser?.imageUrl}
+               image={image}
+               preview={preview}></UploadImage>
             <Button type="submit" variant="contained" sx={{ marginY: 3 }}>
                Save
             </Button>

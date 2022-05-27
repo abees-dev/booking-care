@@ -18,10 +18,10 @@ import User from '../../layout/dashboard/user';
 
 const headCells = [
    {
-      id: 'Username',
+      id: 'email',
       numeric: true,
       disablePadding: false,
-      label: 'Username',
+      label: 'Email',
    },
    {
       id: 'FullName',
@@ -140,7 +140,7 @@ export default function TablesUser({
                               align="center"
                               key={row._id}
                               scope="row">
-                              {row.username}
+                              {row.email}
                            </TableCell>
                            <TableCell align="center">{row.fullName}</TableCell>
                            <TableCell align="center">

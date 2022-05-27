@@ -2,6 +2,9 @@ import User from '../models/User';
 import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
+import cloudinary from '../utils/cloudinary';
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const multer = require('multer');
 
 class authController {
 	async registerUser(req, res) {
@@ -138,6 +141,8 @@ class authController {
 			gender,
 			roleId,
 			positionId,
+			imageUrl,
+			imageId,
 		} = req.body;
 		try {
 			const data = await User.findOne({
@@ -149,6 +154,9 @@ class authController {
 					success: false,
 					message: 'This email already exists',
 				});
+			const uploadRes = await cloudinary.uploader.upload(req.file.path, {
+				upload_preset: 'bookingcare',
+			});
 
 			const passwordHash = await argon2.hash(password);
 			const newUser = new User({
@@ -161,6 +169,8 @@ class authController {
 				gender,
 				roleId,
 				positionId,
+				imageUrl: uploadRes.secure_url,
+				imageId: uploadRes.public_id,
 			});
 			await newUser.save();
 			res.status(201).json({
@@ -189,6 +199,8 @@ class authController {
 			gender,
 			roleId,
 			positionId,
+			imageUrl,
+			imageId,
 		} = req.body;
 		try {
 			const id = req.query.id;
@@ -204,6 +216,10 @@ class authController {
 					.json({ success: false, message: 'user is not exist ' });
 			// const passwordHash = await argon2.hash(password)
 
+			// const uploadRes = await cloudinary.uploader.upload(req.file.path, {
+			// 	upload_preset: 'bookingcare',
+			// });
+
 			const user = await User.findOneAndUpdate(
 				{ _id: id },
 				{
@@ -216,8 +232,13 @@ class authController {
 					gender,
 					roleId,
 					positionId,
+					// imageUrl: uploadRes.secure_url || imageUrl,
+					// imageId: uploadRes.public_id,
 				}
 			);
+			// if (uploadRes) {
+			// 	await cloudinary.uploader.destroy(user.imageId);
+			// }
 			// Check User
 			if (!user)
 				return res
@@ -230,6 +251,7 @@ class authController {
 			res.status(500).json({
 				success: false,
 				message: 'Internal Server error',
+				error,
 			});
 		}
 	}
@@ -256,6 +278,8 @@ class authController {
 					.status(201)
 					.json({ success: false, message: 'user is not exist' });
 			// await User.save()
+			// Delete image
+			await cloudinary.uploader.destroy(user.imageId);
 			return res
 				.status(200)
 				.json({ success: true, message: 'Delete users  successfully' });

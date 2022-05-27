@@ -1,5 +1,5 @@
-import mongoose from 'mongoose'
-const Schema = mongoose.Schema
+import mongoose from 'mongoose';
+const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
 	username: {
@@ -31,6 +31,7 @@ const UserSchema = new Schema({
 		type: String,
 	},
 	imageUrl: { type: String },
+	imageId: { type: String },
 	roleId: {
 		type: String,
 	},
@@ -40,6 +41,6 @@ const UserSchema = new Schema({
 		timeZone: '+07:00',
 		default: Date.now(),
 	},
-})
+});
 
-module.exports = mongoose.model('Users', UserSchema)
+module.exports = mongoose.model('Users', UserSchema);
