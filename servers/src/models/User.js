@@ -2,6 +2,11 @@ import mongoose from 'mongoose'
 const Schema = mongoose.Schema
 
 const UserSchema = new Schema({
+	username: {
+		type: String,
+		required: true,
+		unique: true,
+	},
 	email: {
 		type: String,
 		required: true,
@@ -14,30 +19,25 @@ const UserSchema = new Schema({
 	fullName: {
 		type: String,
 		required: true,
-		default: '',
 	},
 	address: {
 		type: String,
-		default: '',
 	},
 	phoneNumber: {
 		type: String,
 		maxLength: 11,
-		default: '',
 	},
 	gender: {
-		type: Boolean,
-		required: true,
-		default: '',
+		type: String,
 	},
 	imageUrl: { type: String },
 	roleId: {
 		type: String,
-		default: '',
 	},
 	positionId: { type: String },
 	createdAt: {
 		type: Date,
+		timeZone: '+07:00',
 		default: Date.now(),
 	},
 })

@@ -2,13 +2,12 @@ import mongoose from 'mongoose'
 const Schema = mongoose.Schema
 
 const allCodeSchema = new Schema({
-	key: {
+	keys: {
 		type: String,
 		required: true,
 	},
 	type: {
 		type: String,
-		required: true,
 	},
 	valueEn: {
 		type: String,
@@ -18,4 +17,4 @@ const allCodeSchema = new Schema({
 	},
 })
 
-module.exports = mongoose.model('allcode', allCodeSchema)
+module.exports = mongoose.model('Allcode', allCodeSchema)
