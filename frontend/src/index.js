@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { MaterialUIControllerProvider } from './context';
 import { RecoilRoot } from 'recoil';
 import { SnackbarProvider } from 'notistack';
+import './utils/i18n';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

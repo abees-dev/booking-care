@@ -1,5 +1,5 @@
-import React from 'react'
-import DashBoardLayout from '../../../components/LayoutContainer/DashBoardLayout'
+import React from 'react';
+import DashBoardLayout from '../../../components/LayoutContainer/DashBoardLayout';
 
 const Handbook = () => {
    return (
@@ -8,7 +8,7 @@ const Handbook = () => {
             <div>Clinic</div>
          </DashBoardLayout>
       </>
-   )
-}
+   );
+};
 
-export default Handbook
+export default Handbook;

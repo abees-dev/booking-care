@@ -1,9 +1,10 @@
 import { Avatar, Stack, Typography } from '@mui/material';
 import React from 'react';
+import { Trans, withNamespaces } from 'react-i18next';
 import specialtyImg from '../../assets/specialty/bv-viet-duc.jpg';
 import { grey } from '@mui/material/colors';
 
-const CardDoctor = () => {
+const CardDoctor = ({ t, name, imageUrl, position }) => {
    return (
       <Stack
          sx={{
@@ -13,8 +14,8 @@ const CardDoctor = () => {
          }}>
          <Avatar
             alt="Remy Sharp"
-            src={specialtyImg}
-            sx={{ width: 120, height: 120, margin: '12px auto' }}
+            src={imageUrl}
+            sx={{ width: 120, height: 120, margin: '12px auto', boxShadow: 1 }}
          />
          <Typography
             variant="body1"
@@ -23,7 +24,7 @@ const CardDoctor = () => {
             sx={{
                fontSize: 13,
             }}>
-            Phó Giáo sư, Tiến sĩ, Bác sĩ Nguyễn Thi Hùng
+            {t(position)} {t(name)}
          </Typography>
          <Typography variant="body1" color={grey[600]} sx={{ fontSize: 12 }}>
             Thần Kinh
@@ -32,4 +33,4 @@ const CardDoctor = () => {
    );
 };
 
-export default CardDoctor;
+export default withNamespaces()(CardDoctor);

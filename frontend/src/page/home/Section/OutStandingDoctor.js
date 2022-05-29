@@ -37,6 +37,7 @@ const OutStandingDoctor = () => {
       };
       feathData();
    }, []);
+   console.log(doctor);
    return (
       <>
          <ContainerFluid>
@@ -53,7 +54,10 @@ const OutStandingDoctor = () => {
                   {doctor &&
                      doctor.map((item) => (
                         <SwiperSlide key={item._id}>
-                           <CardDoctor></CardDoctor>
+                           <CardDoctor
+                              name={item.fullName}
+                              imageUrl={item.imageUrl}
+                              position={item.positionId}></CardDoctor>
                         </SwiperSlide>
                      ))}
                </SwiperParent>
